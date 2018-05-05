@@ -42,16 +42,30 @@ RSpec.describe ProjectPolicy do
     end
   end
 
-  # permissions :create? do
-  #   pending "add some examples to (or delete) #{__FILE__}"
-  # end
+  context "policy_scope" do
+    subject { Pundit.policy_scope(user, Project) }
 
-  # permissions :update? do
-  #   pending "add some examples to (or delete) #{__FILE__}"
-  # end
+    let!(:project) { FactoryGirl.create :project }
+    let(:user) { FactoryGirl.create :user }
 
-  # permissions :destroy? do
-  #   pending "add some examples to (or delete) #{__FILE__}"
-  # end
-  
+    it "is empty for anonymous users" do
+      expect(Pundit.policy_scope(nil, Project)).to be_empty
+    end
+
+    it "includes projects a user is allowed to view" do
+      assign_role!(user, :viewer, project)
+      expect(subject).to include(project)
+    end
+
+
+    it "doesn't include projects a user is not allowed to view" do
+      expect(subject).to be_empty
+    end
+
+    it "returns all projects for admins" do
+      user.admin = true
+      expect(subject).to include(project)
+    end
+  end
+   
 end
