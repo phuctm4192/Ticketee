@@ -3,10 +3,6 @@ require 'rails_helper'
 RSpec.describe ProjectPolicy do
   subject { described_class }
 
-  # permissions ".scope" do
-  #   pending "add some examples to (or delete) #{__FILE__}"
-  # end
-
   permissions :show? do
     let(:user) { FactoryGirl.create :user }
     let(:project) { FactoryGirl.create :project }
@@ -37,6 +33,41 @@ RSpec.describe ProjectPolicy do
 
     it "doesn't allow users assigned to other project" do
       other_project = FactoryGirl.create(:project)
+      assign_role!(user, :manager, other_project)
+      expect(subject).not_to permit(user, project)
+    end
+  end
+
+  permissions :update? do
+    let(:user) { FactoryGirl.create(:user) }
+    let(:project) { FactoryGirl.create(:project) }
+
+    it "blocks anonymous users" do
+      expect(subject).not_to permit(nil, project)
+    end
+
+    it "doesn't allow viewers of the project" do
+      assign_role!(user, :viewer, project)
+      expect(subject).not_to permit(user, project)
+    end
+
+    it "doesn't allow editors of the project" do
+      assign_role!(user, :editor, project)
+      expect(subject).not_to permit(user, project)
+    end
+
+    it "allow manager of the project" do
+      assign_role!(user, :manager, project)
+      expect(subject).to permit(user, project)
+    end
+
+    it "allows administrators" do
+      admin = FactoryGirl.create(:user, :admin)
+      expect(subject).to permit(admin, project)
+    end
+
+    it "doesn't allow users assigned to other project" do
+      other_project = FactoryGirl.create :project
       assign_role!(user, :manager, other_project)
       expect(subject).not_to permit(user, project)
     end
