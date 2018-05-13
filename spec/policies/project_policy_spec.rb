@@ -21,7 +21,7 @@ RSpec.describe ProjectPolicy do
       it { should_not permit_action :update }
     end
 
-    context "for editors ot the project" do
+    context "for editors of the project" do
       before { assign_role!(user, :editor, project) }
 
       it { should permit_action :show }
