@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180518174137) do
+ActiveRecord::Schema.define(version: 20180525095721) do
 
   create_table "attachments", force: :cascade do |t|
     t.string "file"
@@ -18,6 +18,16 @@ ActiveRecord::Schema.define(version: 20180518174137) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["ticket_id"], name: "index_attachments_on_ticket_id"
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.text "text"
+    t.integer "ticket_id"
+    t.integer "author_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_comments_on_author_id"
+    t.index ["ticket_id"], name: "index_comments_on_ticket_id"
   end
 
   create_table "projects", force: :cascade do |t|
