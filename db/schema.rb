@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180528145852) do
+ActiveRecord::Schema.define(version: 20180529141448) do
 
   create_table "attachments", force: :cascade do |t|
     t.string "file"
@@ -27,7 +27,9 @@ ActiveRecord::Schema.define(version: 20180528145852) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "state_id"
+    t.integer "previous_state_id"
     t.index ["author_id"], name: "index_comments_on_author_id"
+    t.index ["previous_state_id"], name: "index_comments_on_previous_state_id"
     t.index ["state_id"], name: "index_comments_on_state_id"
     t.index ["ticket_id"], name: "index_comments_on_ticket_id"
   end
