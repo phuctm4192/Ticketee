@@ -14,6 +14,14 @@
     <%= javascript_include_tag 'application' %>
     
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+      <% State.all.each do |state| %>
+        .state-<%= state.name.parameterize %> {
+          background-color: <%= state.color %>;
+        }
+      <% end %>
+    </style>
   </head>
 
   <body>
