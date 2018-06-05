@@ -10,4 +10,12 @@ class Ticket < ApplicationRecord
   validates :name, presence: true
   validates :description, presence: true, length: { minimum: 10 }
 
+  before_create :assign_default_state
+
+  #a ||= b is equivalent a || a = b
+  #if left side is true, we no need to check right side
+  private
+  def assign_default_state
+    self.state ||= State.default
+  end
 end
