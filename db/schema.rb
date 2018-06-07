@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180605082522) do
+ActiveRecord::Schema.define(version: 20180606174105) do
 
   create_table "attachments", force: :cascade do |t|
     t.string "file"
@@ -57,6 +57,15 @@ ActiveRecord::Schema.define(version: 20180605082522) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "default", default: false
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "name"
+  end
+
+  create_table "tags_tickets", id: false, force: :cascade do |t|
+    t.integer "tag_id", null: false
+    t.integer "ticket_id", null: false
   end
 
   create_table "tickets", force: :cascade do |t|
