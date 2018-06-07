@@ -11,6 +11,9 @@ class Comment < ApplicationRecord
 
   before_create :set_previous_state
   after_create :set_ticket_state
+  after_create :associate_tags_with_ticket
+
+  attr_accessor :tag_names
 
   private
   def set_ticket_state
@@ -20,5 +23,13 @@ class Comment < ApplicationRecord
 
   def set_previous_state
     self.previous_state = ticket.state
+  end
+
+  def associate_tags_with_ticket
+    if tag_names
+      tag_names.split.each do |name|
+        ticket.tags << Tag.find_or_create_by(name: name)
+      end
+    end
   end
 end
